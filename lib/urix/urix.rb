@@ -6,7 +6,7 @@ module URIx
 
 	class URIx
 
-		attr_accessor :usb, :device, :handle
+		attr :usb, :device, :handle
 		attr_reader :pin_states, :pin_modes
 		
 		def initialize
@@ -23,6 +23,11 @@ module URIx
 			
 			@handle.detach_kernel_driver(HID_INTERFACE)
 			@handle.claim_interface( HID_INTERFACE )
+		end
+
+		def close_interface
+			@handle.release_interface( HID_INTERFACE )
+			@handle.close
 		end
 
 		def set_output pin, state
