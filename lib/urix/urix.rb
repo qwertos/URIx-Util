@@ -14,7 +14,6 @@ module URIx
 			@pin_states = 0x0
 			@pin_modes = 0x0
 			
-			claim_interface
 			set_pin_mode( PTT_PIN, :output )
 		end
 
@@ -28,6 +27,7 @@ module URIx
 
 		def close_interface
 			@handle.release_interface( HID_INTERFACE )
+			@handle.attach_kernel_driver(HID_INTERFACE)
 			@handle.close
 		end
 
@@ -52,8 +52,6 @@ module URIx
 				mask = 0 + ( 1 << ( pin - 1 ))
 				@pin_modes ^= mask
 			end
-
-			write_output
 		end
 
 		def set_ptt state
