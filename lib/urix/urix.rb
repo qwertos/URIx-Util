@@ -13,7 +13,8 @@ module URIx
 			@usb = LIBUSB::Context.new
 			@pin_states = 0x0
 			@pin_modes = 0x0
-
+			
+			claim_interface
 			set_pin_mode( PTT_PIN, :output )
 		end
 
