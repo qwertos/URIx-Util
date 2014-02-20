@@ -25,6 +25,9 @@ module URIx
 		end
 
 		def set_output pin, state
+			state = false if state == :low
+			state = true  if state == :high
+
 			if ( @pin_states >> ( pin - 1 )).odd? && ( state == false ) or
 			   ( @pin_states >> ( pin - 1 )).even? && ( state == true ) then
 
