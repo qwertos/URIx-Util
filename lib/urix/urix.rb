@@ -7,11 +7,14 @@ module URIx
 	class URIx
 
 		attr_accessor :usb, :device, :handle
-		attr_reader :pin_states
+		attr_reader :pin_states, :pin_modes
 		
 		def initialize
 			@usb = LIBUSB::Context.new
 			@pin_states = 0x0
+			@pin_modes = 0x0
+
+			set_pin_mode( PTT_PIN, :output )
 		end
 
 		def init_interface
@@ -30,10 +33,15 @@ module URIx
 			end
 		end
 
+		def set_pin_mode pin, mode
+			if ( @pin_modes >> ( pin - 1 )).odd? && ( mode == :input ) or
+			   ( @pin_modes >> ( pin - 1 )).even? && ( mode == :output ) then
+
+				mask = 0 + ( 1 << ( pin - 1 ))
+				@pin_modes ^= mask
+			end
+		end
 			
-
-
-
 	end
 
 end
