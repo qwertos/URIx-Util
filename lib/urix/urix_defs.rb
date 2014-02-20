@@ -13,7 +13,7 @@ module URIx
 
 	HID_INTERFACE = 3
 
-	PTT_IO = 3
+	PTT_PIN = 3
 
 end
 
