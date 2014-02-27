@@ -46,7 +46,7 @@ module URIx
 		end
 
 		def set_pin_mode pin, mode
-			if ( @pin_modes >> ( pin - 1 )).odd? && ( mode == :input ) or
+			if ( @pin_modes >> ( pin - 1 )).odd?  && ( mode == :input  ) or
 			   ( @pin_modes >> ( pin - 1 )).even? && ( mode == :output ) then
 
 				mask = 0 + ( 1 << ( pin - 1 ))
@@ -83,7 +83,6 @@ module URIx
 				:dataOut => dout
 			)
 		end
-
 	end
 end
 
