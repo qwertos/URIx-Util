@@ -7,18 +7,25 @@ module URIx
 	class URIx
 
 		attr :usb, :device, :handle
-		attr_reader :pin_states, :pin_modes
+		attr_reader :pin_states, :pin_modes, :claimed
 		
 		def initialize
 			@usb = LIBUSB::Context.new
 			@pin_states = 0x0
 			@pin_modes = 0x0
+			@claimed = false
 			
 			set_pin_mode( PTT_PIN, :output )
 		end
 
 		def claim_interface
-			@device = usb.devices(:idVendor => VENDOR_ID, :idProduct => PRODUCT_ID).first
+			devices = usb.devices(:idVendor => VENDOR_ID, :idProduct => PRODUCT_ID)
+
+			unless devices.first then
+				return
+			end
+
+			@device = devices.first
 			@handle = @device.open
 			
 			@handle.detach_kernel_driver(HID_INTERFACE)
