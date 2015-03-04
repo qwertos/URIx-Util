@@ -9,6 +9,8 @@ module URIx
 		attr :usb, :device, :handle
 		attr_reader :pin_states, :pin_modes, :claimed
 		
+
+		# Creates a new URIx interface.
 		def initialize
 			@usb = LIBUSB::Context.new
 			@pin_states = 0x0
@@ -18,6 +20,9 @@ module URIx
 			set_pin_mode( PTT_PIN, :output )
 		end
 
+		
+		# Claim the USB interface for this program. Must be
+		# called to begin using the interface.
 		def claim_interface
 			devices = usb.devices(:idVendor => VENDOR_ID, :idProduct => PRODUCT_ID)
 
@@ -32,12 +37,20 @@ module URIx
 			@handle.claim_interface( HID_INTERFACE )
 		end
 
+
+		# Closes the interface and frees it to be used by something
+		# else. Important to call at the end of program.
 		def close_interface
 			@handle.release_interface( HID_INTERFACE )
 			@handle.attach_kernel_driver(HID_INTERFACE)
 			@handle.close
 		end
 
+
+		# Sets the state of a GPIO pin. 
+		#
+		# @param pin [Integer] ID of GPIO pin.
+		# @param state [Boolean] State to set pin to. True == :high
 		def set_output pin, state
 			state = false if state == :low
 			state = true  if state == :high
@@ -52,6 +65,11 @@ module URIx
 			write_output
 		end
 
+
+		# Sets the mode of a GPIO pin to input or output.
+		#
+		# @param pin [Integer] ID of GPIO pin.
+		# @param mode [Symbol] :input or :output
 		def set_pin_mode pin, mode
 			if ( @pin_modes >> ( pin - 1 )).odd?  && ( mode == :input  ) or
 			   ( @pin_modes >> ( pin - 1 )).even? && ( mode == :output ) then
@@ -61,10 +79,16 @@ module URIx
 			end
 		end
 
+
+		# Shortcut for `set_output( PTT_PIN, state )`
+		#
+		# @param state [Boolean] State to set PTT pin to. True == :high
 		def set_ptt state
 			set_output PTT_PIN, state
 		end
 		
+
+
 		private
 		def write_output
 			type  = LIBUSB::ENDPOINT_OUT
