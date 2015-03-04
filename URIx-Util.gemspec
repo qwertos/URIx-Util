@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
 	s.name        = "urix-util"
-	s.version     = '0.1.3'
+	s.version     = '0.1.5'
 	s.licenses    = ['MIT']
 	s.summary     = 'A library to talk to a URIx radio interface.'
 	s.description = s.summary
